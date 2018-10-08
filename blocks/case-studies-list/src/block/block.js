@@ -28,7 +28,7 @@ const { Fragment } = wp.element;
 registerBlockType( 'casestudies/case-studies-list-block', {
 	title: __( 'Case Studies List' ),
 	icon: 'editor-ul',
-	category: 'dunn',
+	category: 'common',
 	keywords: [
 		__( 'Case Studies List' ),
 	],
