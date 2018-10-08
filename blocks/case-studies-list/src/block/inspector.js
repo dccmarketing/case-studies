@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { isUndefined, pickBy } from 'lodash';
+import pickBy from 'lodash/pickBy';
+import isUndefined from 'lodash/isUndefined';
 
 const { __ } = wp.i18n;
 const { InspectorControls } = wp.editor;

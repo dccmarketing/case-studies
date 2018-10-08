@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import he from 'he';
-import { isUndefined, pickBy } from 'lodash';
+import pickBy from 'lodash/pickBy';
+import isUndefined from 'lodash/isUndefined';
 
 const { withSelect } = wp.data;
 
