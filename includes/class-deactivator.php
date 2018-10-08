@@ -17,8 +17,7 @@ class Deactivator {
 	/**
 	 * Short Description. (use period)
 	 *
-	 * Long Description.
-	 *
+	 * @hooked 		register_deactivation_hook
 	 * @since 		1.0.0
 	 */
 	public static function deactivate() {

@@ -16,16 +16,19 @@ use \CaseStudies\Admin as Admin;
 class Activator {
 
 	/**
-	 * Registers CPTs, taxomomies, and plugin settings, then flushes rewrite rules
+	 * Registers CPTs, taxomomies, and plugin settings, then flushes rewrite rules.
 	 *
+	 * @hooked 		register_activation_hook
 	 * @since 		1.0.0
 	 */
 	public static function activate() {
 
-		// $cpt = new Admin\CPT_Employee();
+		$cpt = new Admin\CPT_CaseStudy();
+		$tax = new Admin\Taxonomy_Service();
 
-		// $cpt->new_cpt_employee();
-		// $cpt->flush_rewrites();
+		$cpt->new_cpt_casestudy();
+		$tax->new_taxonomy_service();
+		$cpt->flush_rewrites();
 
 	} // activate()
 
