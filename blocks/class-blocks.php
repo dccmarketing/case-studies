@@ -66,8 +66,7 @@ class Blocks {
 			wp_enqueue_style(
 				$block . '-block-all-css',
 				plugin_dir_url( __FILE__ ) . $block . '/dist/blocks.style.build.css', dirname( __FILE__ ), 
-				array( 'wp-blocks' ), 
-				CASE_STUDIES_VERSION
+				array( 'wp-blocks' )
 			);
 		}
 
@@ -90,16 +89,14 @@ class Blocks {
 		foreach ( $blocks as $block ) {
 			wp_enqueue_script(
 				$block . '-block-scripts',
-				plugin_dir_url( __FILE__ ) . $block . '/dist/blocks.build.js', dirname( __FILE__ ), 
+				plugin_dir_url( __FILE__ ) . $block . '/dist/blocks.build.js', dirname( __FILE__ ),
 				plugin_dir_url( __FILE__ ) . 'dist/blocks.build.js',
-				array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-api', 'wp-data', 'wp-date', 'wp-utils' ),
-				CASE_STUDIES_VERSION
+				array( 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-api', 'wp-data', 'wp-date', 'wp-utils' )
 			);
 			wp_enqueue_style(
 				$block . '-block-editor-css',
 				plugin_dir_url( __FILE__ ) . $block . '/dist/blocks.editor.build.css', dirname( __FILE__ ),
-				array( 'wp-blocks' ), 
-				CASE_STUDIES_VERSION
+				array( 'wp-blocks' )
 			);
 		}
 
@@ -138,6 +135,10 @@ class Blocks {
 				'categories' => array(
 					'type' => 'string',
 				),
+				'listLayout' => array(
+					'type' => 'string',
+					'default' => 'list',
+				),
 				'perPage' => array(
 					'type' => 'number',
 				),
@@ -148,6 +149,10 @@ class Blocks {
 				'orderBy' => array(
 					'type' => 'string',
 					'default' => 'date',
+				),
+				'showLogo' => array(
+					'type' => 'boolean',
+					'default' => false,
 				),
 			),
 			'render_callback' => array( $this, 'render_case_studies_list_block' )
@@ -182,9 +187,18 @@ class Blocks {
 
 		if ( 0 <= $studies->post_count && empty( $studies->posts ) ) { return; }
 
+		$listClasses = array();
+		$listClasses[] = 'case-study-list';
+
+		if ( 'grid' === $attributes['listLayout'] ) {
+
+			$listClasses[] = 'is-grid';
+
+		}
+
 		$markup = '';
 
-		$markup .= '<ul class="case-study-list">';
+		$markup .= '<ul class="' . implode( ' ', $listClasses ) . '">';
 
 			foreach ( $studies->posts as $study ) :
 
@@ -192,6 +206,13 @@ class Blocks {
 				$markup .= '<a href="';
 				$markup .= esc_url( get_permalink( $study ) );
 				$markup .= '">';
+
+				if ( 'grid' === $attributes['listLayout'] && $attributes['showLogo'] ) :
+
+					$markup .= $this->maybe_get_featured_image( $study->ID, $attributes['showLogo'] );
+
+				endif;
+
 				$markup .= esc_html( $study->post_title ); 
 				$markup .= '</a></li>';
 
@@ -202,5 +223,22 @@ class Blocks {
 		return $markup;
 
 	} // render_case_studies_list_block()
+
+	/**
+	 * Returns the featured image markup, if available.
+	 * 
+	 * @since 		1.0.0
+	 * @param 		int 		$studyID 		The case study post object ID.
+	 * @param 		bool 		$showLogo 		The block attribute showLogo.
+	 * @return 		mixed 						The featured image markup.
+	 */
+	public function maybe_get_featured_image( $studyID, $showLogo ) {
+
+		if ( ! $showLogo ) { return; }
+		if ( ! has_post_thumbnail( $studyID ) ) { return; }
+
+		return get_the_post_thumbnail( $studyID, 'full' );
+
+	} // maybe_get_featured_image()
 
 } // class

@@ -3,11 +3,17 @@ import he from 'he';
 import pickBy from 'lodash/pickBy';
 import isUndefined from 'lodash/isUndefined';
 
+import StudyLogo from './StudyLogoContainer';
+
 const { withSelect } = wp.data;
 
 const Edit = ( { attributes, className, studies } ) => {
-	const { perPage } = attributes;
-	const listClasses = classnames( className );
+	const { listLayout, perPage, showLogo } = attributes;
+	const listClasses = classnames(
+		className,
+		'case-study-list',
+		{ 'is-grid': 'grid' === listLayout }
+	);
 	const studiesList = studies && 0 < studies.length ? studies : [];
 
 	if ( ! studiesList || studiesList < perPage ) {
@@ -19,13 +25,21 @@ const Edit = ( { attributes, className, studies } ) => {
 	const showStudies = studiesList > perPage ?
 		studies.slice( 0, perPage ) :
 		studies;
+
 	return (
 		<ul className={ listClasses }>
 			{
 				showStudies.map( ( study, i ) => {
 					return (
 						<li className="case-study" key={ i }>
-							<a className="case-study-link" href={ study.link }>{ he.decode( study.title.rendered ) }</a>
+							<a className="case-study-link" href={ study.link }>
+								{
+									'grid' === listLayout && showLogo && <StudyLogo study={ study } />
+								}
+								{
+									he.decode( study.title.rendered )
+								}
+							</a>
 						</li>
 					);
 				} )

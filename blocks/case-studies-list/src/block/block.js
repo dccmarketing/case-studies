@@ -8,8 +8,9 @@
 import './style.scss';
 import './editor.scss';
 
-import Edit from './edit';
-import Inspector from './inspector';
+import Edit from './components/Edit';
+import Inspector from './components/Inspector';
+import Controls from './components/Controls';
 import attributes from './attributes.js';
 
 const { __ } = wp.i18n;
@@ -27,7 +28,7 @@ const { Fragment } = wp.element;
  */
 registerBlockType( 'casestudies/case-studies-list-block', {
 	title: __( 'Case Studies List' ),
-	icon: 'editor-ul',
+	icon: 'list-view',
 	category: 'common',
 	keywords: [
 		__( 'Case Studies List' ),
@@ -35,8 +36,18 @@ registerBlockType( 'casestudies/case-studies-list-block', {
 	attributes,
 	edit: ( props ) => (
 		<Fragment>
-			<Inspector { ...props } />
-			<Edit { ...props } />
+			<Inspector
+				attributes={ props.attributes }
+				setAttributes={ props.setAttributes }
+			/>
+			<Controls
+				listLayout={ props.attributes.listLayout }
+				setAttributes={ props.setAttributes }
+			/>
+			<Edit
+				attributes={ props.attributes }
+				className={ props.className }
+			/>
 		</Fragment>
 	),
 	save: () => {
