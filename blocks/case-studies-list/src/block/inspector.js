@@ -1,9 +1,3 @@
-/**
- * WordPress dependencies
- */
-import pickBy from 'lodash/pickBy';
-import isUndefined from 'lodash/isUndefined';
-
 const { __ } = wp.i18n;
 const { InspectorControls } = wp.editor;
 const {
@@ -12,9 +6,8 @@ const {
 } = wp.components;
 const { withSelect } = wp.data;
 
-const Inspector = ( props ) => {
-	const { setAttributes, categoriesList } = props;
-	const { perPage, orderBy, order, categories } = props.attributes;
+const Inspector = ( { attributes, categoriesList, setAttributes } ) => {
+	const { categories, orderBy, order, perPage } = attributes;
 	return (
 		<InspectorControls key="inspector">
 			<PanelBody initialOpen={ true } title={ __( 'List Display Options' ) }>
@@ -35,20 +28,12 @@ const Inspector = ( props ) => {
 
 //export default Inspector;
 
-export default withSelect( ( select, props ) => {
-	const { perPage, order, orderBy, categories } = props.attributes;
+export default withSelect( ( select ) => {
 	const { getEntityRecords } = select( 'core' );
-	const studiesListQuery = pickBy( {
-		per_page: perPage,
-		order,
-		orderby: orderBy,
-		categories,
-	}, ( value ) => ! isUndefined( value ) );
-	const servicesListQuery = {
+	const serviceListQuery = {
 		per_page: 100,
 	};
 	return {
-		studies: getEntityRecords( 'postType', 'casestudy', studiesListQuery ),
-		categoriesList: getEntityRecords( 'taxonomy', 'service', servicesListQuery ),
+		categoriesList: getEntityRecords( 'taxonomy', 'service', serviceListQuery ),
 	};
 } )( Inspector );

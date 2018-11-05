@@ -1,7 +1,6 @@
 const attributes = {
-	perPage: {
-		type: 'number',
-		default: 10,
+	categories: {
+		type: 'string',
 	},
 	order: {
 		type: 'string',
@@ -10,6 +9,10 @@ const attributes = {
 	orderBy: {
 		type: 'string',
 		default: 'date',
+	},
+	perPage: {
+		type: 'number',
+		default: 10,
 	},
 };
 

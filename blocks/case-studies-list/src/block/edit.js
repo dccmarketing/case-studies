@@ -5,11 +5,19 @@ import isUndefined from 'lodash/isUndefined';
 
 const { withSelect } = wp.data;
 
-const Edit = props => {
-	const listClasses = classnames( props.className );
-	const studies = props.studies && 0 < props.studies.length ? props.studies : [];
-	const showStudies = studies.length > props.attributes.perPage ?
-		studies.slice( 0, props.attributes.perPage ) :
+const Edit = ( { attributes, className, studies } ) => {
+	const { perPage } = attributes;
+	const listClasses = classnames( className );
+	const studiesList = studies && 0 < studies.length ? studies : [];
+
+	if ( ! studiesList || studiesList < perPage ) {
+		return (
+			<p>There are no studies to display.</p>
+		);
+	}
+
+	const showStudies = studiesList > perPage ?
+		studies.slice( 0, perPage ) :
 		studies;
 	return (
 		<ul className={ listClasses }>
@@ -27,14 +35,15 @@ const Edit = props => {
 };
 
 export default withSelect( ( select, props ) => {
-	const { perPage, order, orderBy, categories } = props.attributes;
+	const { categories, order, orderBy, perPage } = props.attributes;
 	const { getEntityRecords } = select( 'core' );
 	const studiesListQuery = pickBy( {
 		per_page: perPage,
 		order,
 		orderby: orderBy,
-		categories,
+		service: categories,
 	}, ( value ) => ! isUndefined( value ) );
+
 	return {
 		studies: getEntityRecords( 'postType', 'casestudy', studiesListQuery ),
 	};

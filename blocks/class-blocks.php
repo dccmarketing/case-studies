@@ -135,6 +135,9 @@ class Blocks {
 
 		register_block_type( 'casestudies/case-studies-list-block', array(
 			'attributes' => array(
+				'categories' => array(
+					'type' => 'string',
+				),
 				'perPage' => array(
 					'type' => 'number',
 				),
@@ -166,6 +169,14 @@ class Blocks {
 		$args['order'] 			= $attributes['order'];
 		$args['orderby'] 		= $attributes['orderBy'];
 		$args['posts_per_page'] = $attributes['perPage'];
+
+		if ( ! empty( $attributes['categories'] ) ) {
+
+			$args['tax_query'][0]['taxonomy'] 	= 'service';
+			$args['tax_query'][0]['field'] 		= 'id';
+			$args['tax_query'][0]['terms'] 		= $attributes['categories'];
+
+		}
 
 		$studies = $this->query->query( $args );
 
