@@ -141,6 +141,7 @@ class Blocks {
 				),
 				'perPage' => array(
 					'type' => 'number',
+					'default' => 10,
 				),
 				'order' => array(
 					'type' => 'string',
